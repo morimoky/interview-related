@@ -1,0 +1,134 @@
+InnoDB和MyISAM是在使用MySQL最常用的两个表类型，各有优缺点，视具体应 用而定。基本的差别为：MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。MyISAM类型的表强调的是性能，其执行数度比 InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等高级数据库功能。
+MyIASM是IASM表的新版本，有如下扩展：  
+     二进制层次的可移植性。  
+     NULL列索引。  
+     对变长行比ISAM表有更少的碎片。  
+     支持大文件。  
+     更好的索引压缩。  
+     更好的键吗统计分布。  
+     更好和更快的auto_increment处理。  
+以下是一些细节和具体实现的差别：
+1.InnoDB不支持FULLTEXT类型的索引。
+2.InnoDB中不保存表 的具体行数，也就是说，执行select count(*) from table时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count(*)语句包含 where条件时，两种表的操作是一样的。
+3.对于AUTO_INCREMENT类型的字段，InnoDB中必须包含只有该字段的索引，但是在MyISAM表中，可以和其他字段一起建立联合索引。
+4.DELETE FROM table时，InnoDB不会重新建立表，而是一行一行的删除。
+5.LOAD TABLE FROM MASTER操作对InnoDB是不起作用的，解决方法是首先把InnoDB表改成MyISAM表，导入数据后再改成InnoDB表，但是对于使用的额外的InnoDB特性（例如外键）的表不适用。
+另外，InnoDB表的行锁也不是绝对的，如果在执行一个SQL语句时MySQL不能确定要扫描的范围，InnoDB表同样会锁全表，例如update table set num=1 where name like “%aaa%”
+任何一种表都不是万能的，只用恰当的针对业务类型来选择合适的表类型，才能最大的发挥MySQL的性能优势.
+ 
+MySQL中MyISAM引擎与InnoDB引擎性能简单测试
+[硬件配置]
+CPU : AMD2500+ (1.8G)
+内存: 1G/现代
+硬盘: 80G/IDE
+
+[软件配置]
+OS : Windows XP SP2
+SE : PHP5.2.1
+DB : MySQL5.0.37
+Web: IIS6
+
+
+[MySQL表结构]
+
+CREATE TABLE `myisam` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) default NULL,
+  `content` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+
+CREATE TABLE `innodb` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) default NULL,
+  `content` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+
+[数据内容]
+
+$name = "heiyeluren";
+$content = "MySQL支持数个存储引擎作为对不同表的类型的处理器。MySQL存储引擎包括处理事务安全表的引擎和处理非事务安全表的引擎：· MyISAM管理非事务表。它提供高速存储和检索，以及全文搜索能力。MyISAM在所有MySQL配置里被支持，它是默认的存储引擎，除非你配置 MySQL默认使用另外一个引擎。 ·MEMORY存储引擎提供“内存中”表。MERGE存储引擎允许集合将被处理同样的MyISAM表作为一个单独的表。就像MyISAM一 样，MEMORY和MERGE存储引擎处理非事务表，这两个引擎也都被默认包含在MySQL中。 释：MEMORY存储引擎正式地被确定为HEAP引擎。· InnoDB和BDB存储引擎提供事务安全表。BDB被包含在为支持它的操作系统发布的MySQL-Max二进制分发版里。InnoDB也默认被包括在所 有MySQL 5.1二进制分发版里，你可以按照喜好通过配置MySQL来允许或禁止任一引擎。·EXAMPLE存储引擎是一个“存根”引擎，它不做什么。你可以用这个 引擎创建表，但没有数据被存储于其中或从其中检索。这个引擎的目的是服务，在MySQL源代码中的一个例子，它演示说明如何开始编写新存储引擎。同样，它 的主要兴趣是对开发者。";
+
+
+[插入数据-1] (innodb_flush_log_at_trx_commit=1)
+MyISAM 1W：3/s
+InnoDB 1W：219/s
+
+MyISAM 10W：29/s
+InnoDB 10W：2092/s
+
+MyISAM 100W：287/s
+InnoDB 100W：没敢测试
+
+[插入数据-2] (innodb_flush_log_at_trx_commit=0)
+MyISAM 1W：3/s
+InnoDB 1W：3/s
+
+MyISAM 10W：30/s
+InnoDB 10W：29/s
+
+MyISAM 100W：273/s
+InnoDB 100W：423/s
+
+[插入数据3] (innodb_buffer_pool_size=1024M)
+InnoDB 1W：3/s
+InnoDB 10W：33/s
+InnoDB 100W：607/s
+
+[插入数据4] (innodb_buffer_pool_size=256M, innodb_flush_log_at_trx_commit=1, set autocommit=0)
+
+InnoDB 1W：3/s
+InnoDB 10W：26/s
+InnoDB 100W：379/s
+
+
+
+[MySQL 配置文件] (缺省配置)
+
+# MySQL Server Instance Configuration File
+[client]
+port=3306
+
+[mysql]
+default-character-set=gbk
+
+[mysqld]
+port=3306
+basedir="C:/mysql50/"
+datadir="C:/mysql50/Data/"
+default-character-set=gbk
+default-storage-engine=INNODB
+sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+max_connections=100
+
+query_cache_size=0
+table_cache=256
+tmp_table_size=50M
+thread_cache_size=8
+myisam_max_sort_file_size=100G
+myisam_max_extra_sort_file_size=100G
+myisam_sort_buffer_size=100M
+key_buffer_size=82M
+read_buffer_size=64K
+read_rnd_buffer_size=256K
+sort_buffer_size=256K
+
+innodb_additional_mem_pool_size=4M
+innodb_flush_log_at_trx_commit=1
+innodb_log_buffer_size=2M
+innodb_buffer_pool_size=159M
+innodb_log_file_size=80M
+innodb_thread_concurrency=8
+
+
+
+
+【总结】
+
+可 以看出在MySQL 5.0里面，MyISAM和InnoDB存储引擎性能差别并不是很大，针对InnoDB来说，影响性能的主要是 innodb_flush_log_at_trx_commit 这个选项，如果设置为1的话，那么每次插入数据的时候都会自动提交，导致性能急剧下降，应该是跟刷新日志有关系，设置为0效率能够看到明显提升，当然，同 样你可以SQL中提交“SET AUTOCOMMIT = 0”来设置达到好的性能。另外，还听说通过设置innodb_buffer_pool_size能够提升InnoDB的性能，但是我测试发现没有特别明显 的提升。
+
+基本上我们可以考虑使用InnoDB来替代我们的MyISAM引擎了，因为InnoDB自身很多良好的特点，比如事务支持、存储 过程、视图、行级锁定等等，在并发很多的情况下，相信InnoDB的表现肯定要比MyISAM强很多，当然，相应的在my.cnf中的配置也是比较关键 的，良好的配置，能够有效的加速你的应用。
+
+如果不是很复杂的Web应用，非关键应用，还是可以继续考虑MyISAM的，这个具体情况可以自己斟酌。
