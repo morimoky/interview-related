@@ -1,0 +1,11 @@
+1.截取有汉字的字符串（不留乱码）：mb_substr($str,0,100,'utf-8');
+2.ucwords() 函数把字符串中每个单词的首字符转换为大写；
+3.explode 字符串转数组；
+4.implode 数组转字符串；
+5.strrchr() 函数查找字符串在另一个字符串中最后一次出现的位置，并返回从该位置到字符串结尾的所有字符。
+6.字符串编码转换：
+    $string=iconv(原字符编码, 字符输出编码, $string);
+    $string=mb_convert_encoding($string, 字符输出编码, 原字符编码);
+7.htmlentities($string)可以把字符转换为 HTML 实体 ,防止跨站点脚本注入，作用和htmlspecialchars()基本相同，但是但htmlentities会格式化中文字符使得中文输入是乱码。
+html_entity_decode() 是 htmlentities() 的反函数。 
+8.nl2br()函数在字符串中的每个新行 (\n) 之前插入 HTML 换行符 (<br />)
