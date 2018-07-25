@@ -1,0 +1,5 @@
+后台运行
+nohup command > myout.file 2>&1 &
+
+杀进程：
+ps -ef | grep cli_kingae_adplacement | grep -v grep | cut -c 9-15 | xargs kill -9
