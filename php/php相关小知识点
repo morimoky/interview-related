@@ -1,0 +1,21 @@
+1.404页面一般会在后台添加：header("HTTP/1.1 404 Not Found");用于标准化
+2.如果取自缓存页面，网络中会有304状态码
+3.php：超文本预处理器
+4.php获取post参数的几种方式
+        ①$_POST['paramName'] 只能接收Content-Type: application/x-www-form-urlencoded提交的数据 
+        ②file_get_contents("php://input") 适用大多数类型的Content-type
+php://input 允许读取 POST 的原始数据。和 $HTTP_RAW_POST_DATA 比起来，它给内存带来的压力较小，并且不需要任何特殊的 php.ini 设置。     php://input 不能用于 enctype="multipart/form-data"。
+         ③$GLOBALS['HTTP_RAW_POST_DATA']; 总是产生 $HTTP_RAW_POST_DATA  变量包含有原始的 POST 数据。此变量仅在碰到未识别 MIME 类     型的数据时产生。$HTTP_RAW_POST_DATA  对于 enctype="multipart/form-data"  表单数据不可用。如果post过来的数据不是PHP能够识别的，你可以用 $GLOBALS['HTTP_RAW_POST_DATA']来接收，比如 text/xml 或者 soap 等等。
+5.GD库，是php处理图形的扩展库，GD库提供了一系列用来处理图片的API，使用GD库可以处理图片，或者生成图片。
+6.mysql_fetch_row得到是索引数组（就是关键字是数字，比如$a[1]）。
+   mysql_fetch_assoc 得到的是关联数组（就是数组关键字是字段名，比如$a[name]）。
+   mysql_fetch_array 可以得到关联数组也可以得到索引数组，也可以二者都有。
+7.post和get的不同：
+① get是从服务器上获取数据，post是向服务器传送数据。
+② get是把参数数据队列加到提交表单的ACTION属性所指的URL中，值和表单内各个字段一一对应，在URL中可以看到。post是通过HTTP post机制，将表单内各个字段与其内容放置在HTML HEADER内一起传送到ACTION属性所指的URL地址。用户看不到这个过程。
+③ 对于get方式，服务器端用Request.QueryString获取变量的值，对于post方式，服务器端用Request.Form获取提交的数据。
+④ get传送的数据量较小，不能大于2KB。post传送的数据量较大，一般被默认为不受限制。但理论上，IIS4中最大量为80KB，IIS5中为100KB。
+⑤ get安全性非常低，post安全性较高。但是执行效率却比Post方法好。
+
+
+
