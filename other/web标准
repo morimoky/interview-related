@@ -1,0 +1,19 @@
+ Web标准三剑客
+Web标准是由一系列规范组成，由于Web设计越来越趋向于整体化与结构化，此前的Web标准也逐步成为由三大部分组成的标准集：结构 (Structure)、表现(Presentation)和行为(Behavior)。对应的网站标准也分三方面：结构化标准语言、表现标准语言(主要 包括CSS)和行为标准。这些标准大部分由W3C组织起草和发布，也有一些是其他标准组织制定的标准。
+什么是内容、结构、表现和行为
+1. 内容
+“内容”就是制作者放在页面内真正想要访问者浏览的信息，可以包含数据、文档或者图片等。注意这里强调的“真正”，是指纯粹的数据信息本身，而不包含辅助的信息(如导航菜单、装饰性图片等)，内容是网页的基础，在网页中具有重要的地位。
+2. 结构
+XML——可扩展标记语言
+XML(Extensible Markup Language)目前遵循的是W3C于2000年10月发布的XML 1.0。与HTML一样，XML同样来源于标准通用标记语言(Standard Generalized Markup Language)，但XML是一种能定义其他语言的语言。XML最初设计的目的是弥补HTML的不足，以强大的扩展性满足网络信息发布的需要，后来逐渐 用于网络数据的转换和描述。
+XHTML——可扩展超文本标记语言
+XML虽然数据转换能力强大，但是完全可以替代为时过早。因此，在HTML的基础上，用XML的规则对其进行扩展，得到了XHTML。简单而言，建立XHTML的目的就是实现HTML向XML的过渡。
+XHTML(The Extensible HyperText Markup Language)，在2000年年底国际W3C组织公布发行了XHTML 1.0版本，这是一种在HTML基础上优化和改进的新语言，目的是基于XML的应用。
+3. 表现
+CSS——层叠样式表
+W3C创建CSS标准的目的是用CSS取代HTML表格布局，以及其他基于表现层的语言，使站点的访问与维护更加容易。
+4. 行为
+DOM——文档对象模型
+根据W3C DOM规范，DOM(Document Object Model)是一种W3C颁布的标准，用于对结构化文档建立对象模型，从而使得用户可以通过程序语言(包括脚本)来控制其内部结构。简单地理解，DOM解 决了Netscape的JavaScript和Microsoft的JavaScript之间的冲突，给予Web设计师和开发者一个标准的方法，让他们来 访问站点中的数据、脚本和表现对象。
+ECMAScript
+ECMAScript是ECMA(European Computer Manufacturers Association)制定的标准脚本语言(JavaScript)，目前遵循的是ECMAScript262标准。
