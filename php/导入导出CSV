@@ -1,3 +1,5 @@
+#### 导出CSV
+```
 function export_csv($filename,$data)  
 {  
     header("Content-type:text/csv");  
@@ -7,7 +9,9 @@ function export_csv($filename,$data)
     header('Pragma:public');  
     echo $data;  
 }
-
+```
+#### 导入CSV
+```
 function input_csv($handle)  
 {  
     $out = array ();  
@@ -23,3 +27,4 @@ function input_csv($handle)
     }  
     return $out;  
 } 
+```
