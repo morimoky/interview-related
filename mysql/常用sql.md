@@ -1,8 +1,8 @@
 #### 1.查询某字段值唯一的记录：
 ```
-SELECT ** 
-FROM table_name`table_name ` 
-group by field`field` 
+SELECT *
+FROM table_name 
+group by field
 having count(field) = 1
 ```
 #### 2.插入数据（有唯一索引），如果冲突改为更新：
